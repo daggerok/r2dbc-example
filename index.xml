@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?asciidoc-toc maxdepth="4"?>
+<?asciidoc-numbered?>
+<book xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
+<info>
+<title>r2dbc-example (0.0.1)</title>
+<date>2018-10-13 04:00:20 UTC</date>
+<author>
+<personname>
+<firstname>Maksim</firstname>
+<surname>Kostromin</surname>
+</personname>
+<email>daggerok@gmail.com</email>
+</author>
+<authorinitials>MK</authorinitials>
+<revhistory>
+<revision>
+<revnumber>0.0.1</revnumber>
+<date>2018-10-13 04:00:20 UTC</date>
+<authorinitials>MK</authorinitials>
+</revision>
+</revhistory>
+</info>
+<chapter xml:id="introduction">
+<title>Introduction</title>
+<formalpara>
+<title>gradle</title>
+<para>
+<programlisting language="bash" linenumbering="unnumbered">./gradlew
+java -jar build/libs/*.jar
+bash build/libs/*.jar
+
+./gradlew build composeUp
+./gradlew composeDown</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>maven</title>
+<para>
+<programlisting language="bash" linenumbering="unnumbered">./mvnw
+java -jar target/*.jar
+bash target/*.jar
+
+./mvnw; ./mvnw docker-compose:up -P docker
+./mvnw docker-compose:down -P docker</programlisting>
+</para>
+</formalpara>
+</chapter>
+<chapter xml:id="implementation">
+<title>Implementation</title>
+<simpara>TODO: implement documentation&#8230;&#8203;</simpara>
+</chapter>
+<chapter xml:id="links">
+<title>Links</title>
+<itemizedlist>
+<listitem>
+<simpara><link xl:href="https://github.com/daggerok/r2dbc-example">GitHub repo</link></simpara>
+</listitem>
+<listitem>
+<simpara><link xl:href="https://daggerok.github.io/r2dbc-example">GitHub pages</link></simpara>
+</listitem>
+</itemizedlist>
+</chapter>
+</book>
