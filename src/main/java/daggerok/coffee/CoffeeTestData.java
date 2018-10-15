@@ -15,7 +15,7 @@ public class CoffeeTestData {
   @PostConstruct
   public void init() {
     coffeeRepository.deleteCoffee().thenMany(
-        Flux.just("a", "b", "c")
+        Flux.just("espresso", "latte macchiato", "mocha")
             .map(Coffee::new)
             .flatMap(coffeeRepository::save))
                     .thenMany(coffeeRepository.findAll())

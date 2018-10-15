@@ -9,6 +9,7 @@ public class Controller {
   @GetMapping({ "", "/" })
   public Rendering index() {
     return Rendering.view("index")
+                    .modelAttribute("message", "Hololo trololo!")
                     .build();
   }
 }

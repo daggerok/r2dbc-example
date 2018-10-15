@@ -25,8 +25,10 @@ buildscript {
 
   repositories {
     //mavenLocal()
-    mavenCentral()
+    maven { url 'https://plugins.gradle.org/m2/' }
+    maven { url 'http://repo.spring.io/plugins-release' }
     jcenter()
+    mavenCentral()
     maven { url 'https://repo.spring.io/milestone' }
     maven { url 'https://repo.spring.io/snapshot' }
   }
@@ -47,6 +49,10 @@ plugins {
   id 'io.spring.dependency-management' version '1.0.6.RELEASE' apply false
   id 'com.avast.gradle.docker-compose' version '0.7.1' apply false
   id 'io.franzbecker.gradle-lombok' version '1.14' apply false
+  id 'cn.bestwu.propdeps-eclipse' version '0.0.10'
+  id 'cn.bestwu.propdeps-maven' version '0.0.10'
+  id 'cn.bestwu.propdeps-idea' version '0.0.10'
+  id 'cn.bestwu.propdeps' version '0.0.10'
 }
 
 wrapper {
@@ -54,7 +60,15 @@ wrapper {
   distributionType = 'BIN'
 }
 
-apply from: "$projectDir/gradle/repositories.gradle"
+repositories {
+  //mavenLocal()
+  mavenCentral()
+  jcenter()
+  maven { url 'https://repo.spring.io/milestone' }
+  maven { url 'https://repo.spring.io/snapshot' }
+  maven { url 'https://plugins.gradle.org/m2/' }
+  maven { url 'http://repo.spring.io/plugins-release' }
+}
 
 apply plugin: 'idea'
 
@@ -90,18 +104,16 @@ allprojects {
   }
 }
 
-allprojects {
-  apply plugin: 'java'
+apply plugin: 'java'
 
-  apply plugin: 'io.franzbecker.gradle-lombok'
-  lombok.version = project.lombokVersion
+apply plugin: 'io.franzbecker.gradle-lombok'
+lombok.version = project.lombokVersion
 
-  version = '0.0.1'
-  group = 'com.github.daggerok'
-  sourceCompatibility = targetCompatibility = "$javaVersion"
+version = '0.0.1'
+group = 'com.github.daggerok'
+sourceCompatibility = targetCompatibility = "$javaVersion"
 
-  defaultTasks 'clean', 'build'
-}
+defaultTasks 'clean', 'build'
 
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
@@ -119,130 +131,87 @@ bootJar {
   launchScript()
 }
 
-allprojects {
-  // read more: https://docs.gradle.org/4.6/release-notes.html#junit-5-support
+// read more: https://docs.gradle.org/4.6/release-notes.html#junit-5-support
 
-  dependencies {
-    testImplementation "junit:junit:$junit4Version"
-    testImplementation "org.assertj:assertj-core:$assertjVersion"
-    testImplementation "org.hamcrest:hamcrest-core:$hamcrestVersion"
-    testImplementation "org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion"
-    testRuntimeOnly "org.junit.vintage:junit-vintage-engine:$junitJupiterVersion", {
-      because 'allows JUnit 3 and JUnit 4 tests to run'
-    }
-    testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion", {
-      because 'allows tests to run from IDEs that bundle older version of launcher'
-    }
-    //testCompileOnly 'org.apiguardian:apiguardian-api:1.0.0'
+dependencies {
+  testImplementation "junit:junit:$junit4Version"
+  testImplementation "org.assertj:assertj-core:$assertjVersion"
+  testImplementation "org.hamcrest:hamcrest-core:$hamcrestVersion"
+  testImplementation "org.junit.jupiter:junit-jupiter-api:$junitJupiterVersion"
+  testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitJupiterVersion"
+  testRuntimeOnly "org.junit.vintage:junit-vintage-engine:$junitJupiterVersion", {
+    because 'allows JUnit 3 and JUnit 4 tests to run'
   }
-
-  test {
-    useJUnitPlatform {
-      includeEngines 'junit-jupiter', 'junit-vintage'
-    }
+  testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion", {
+    because 'allows tests to run from IDEs that bundle older version of launcher'
   }
-
-  //apply from: "$project.rootDir/gradle/jgiven.gradle"
+  //testCompileOnly 'org.apiguardian:apiguardian-api:1.0.0'
 }
 
-allprojects {
-  apply plugin: 'findbugs'
-
-  tasks.withType(FindBugs) {
-    reports {
-      xml.enabled false
-      html.enabled true
-      //// see for details/example: https://github.com/findbugsproject/findbugs/blob/master/findbugs/src/xsl/default.xsl
-      //html.stylesheet resources.text.fromFile('config/xsl/findbugs-custom.xsl')
-    }
-  }
-
-  findbugs {
-    reportsDir = file("$rootProject.buildDir/findbugs")
-    ignoreFailures = true
+test {
+  useJUnitPlatform {
+    includeEngines 'junit-jupiter', 'junit-vintage'
   }
 }
 
-allprojects {
-  apply plugin: 'java'
-  apply plugin: 'jacoco'
+//apply from: "$project.rootDir/gradle/jgiven.gradle"
 
-  jacoco {
-    toolVersion = '0.8.1'
+apply plugin: 'findbugs'
+
+tasks.withType(FindBugs) {
+  reports {
+    xml.enabled false
+    html.enabled true
+    //// see for details/example: https://github.com/findbugsproject/findbugs/blob/master/findbugs/src/xsl/default.xsl
+    //html.stylesheet resources.text.fromFile('config/xsl/findbugs-custom.xsl')
   }
+}
 
-  jacocoTestCoverageVerification {
-    violationRules {
-      rule {
-        limit {
-          minimum = 0.5
-        }
-      }
-      rule {
-        enabled = false
-        element = 'CLASS'
-        includes = [
-            'org.gradle.*',
-        ]
-        limit {
-          counter = 'LINE'
-          value = 'TOTALCOUNT'
-          maximum = 0.3
-        }
+findbugs {
+  reportsDir = file("$rootProject.buildDir/findbugs")
+  ignoreFailures = true
+}
+
+apply plugin: 'java'
+apply plugin: 'jacoco'
+
+jacoco {
+  toolVersion = '0.8.1'
+}
+
+jacocoTestCoverageVerification {
+  violationRules {
+    rule {
+      limit {
+        minimum = 0.5
       }
     }
-  }
-}
-
-subprojects {
-  jacocoTestReport {
-    def main = sourceSets.main
-    def srcDirs = main.allSource.srcDirs
-    additionalSourceDirs = files(srcDirs)
-    sourceDirectories = files(srcDirs)
-    classDirectories = files(main.output)
-    reports {
-      xml.enabled = false
-      csv.enabled = false
-      html.enabled = true
-      html.destination file("$buildDir/jacoco/html")
+    rule {
+      enabled = false
+      element = 'CLASS'
+      includes = [
+          'org.gradle.*',
+      ]
+      limit {
+        counter = 'LINE'
+        value = 'TOTALCOUNT'
+        maximum = 0.3
+      }
     }
   }
 }
 
 jacocoTestReport {
-  def main = subprojects.sourceSets.main
+  def main = sourceSets.main
   def srcDirs = main.allSource.srcDirs
-  dependsOn = subprojects.check
   additionalSourceDirs = files(srcDirs)
   sourceDirectories = files(srcDirs)
   classDirectories = files(main.output)
-  executionData = files(subprojects.jacocoTestReport.executionData)
-  afterEvaluate {
-    classDirectories = files(classDirectories.files.collect {
-      fileTree(
-          dir    : it,
-          exclude: [
-              '*donot/check/me*',
-              '*dont/check/metoo*',
-          ]
-      )
-    })
-  }
   reports {
     xml.enabled = false
     csv.enabled = false
     html.enabled = true
-    html.destination file("$rootProject.buildDir/jacoco/html")
-  }
-  onlyIf = {
-    true
-  }
-  doFirst {
-    executionData = files(executionData.findAll {
-      it.exists()
-    })
+    html.destination file("$buildDir/jacoco/html")
   }
 }
 
@@ -264,6 +233,8 @@ dependencies {
   implementation 'org.springframework.boot:spring-boot-starter-webflux'
   implementation 'org.springframework.boot:spring-boot-starter-actuator'
   runtime 'org.springframework.boot:spring-boot-devtools'
+  compileOnly 'org.springframework.boot:spring-boot-configuration-processor'
+  testCompileOnly 'org.springframework.boot:spring-boot-configuration-processor'
   annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
   testAnnotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -273,4 +244,13 @@ dependencies {
   implementation "io.vavr:vavr:$vavrVersion"
   //implementation "org.slf4j:slf4j-api:$slf4jVersion"
   //implementation "ch.qos.logback:logback-classic:$logbackVersion"
+}
+
+compileJava.dependsOn(processResources)
+
+configure(allprojects) {
+  apply plugin: 'cn.bestwu.propdeps'
+  apply plugin: 'cn.bestwu.propdeps-idea'
+  apply plugin: 'cn.bestwu.propdeps-maven'
+  apply plugin: 'cn.bestwu.propdeps-eclipse'
 }

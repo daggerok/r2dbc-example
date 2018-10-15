@@ -1,6 +1,7 @@
 = r2dbc-example image:https://travis-ci.org/daggerok/r2dbc-example.svg?branch=master["Build Status", link="https://travis-ci.org/daggerok/r2dbc-example"]
 
-Reactive JDBC (R2DBC)
+Reactive JDBC (R2DBC): Just try run full clean test build to see it is not failing.
+Connection to database will be lazily initialized only on publisher subscription execution
 
 //tag::content[]
 
