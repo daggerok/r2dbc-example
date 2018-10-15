@@ -1,10 +1,6 @@
 = r2dbc-example image:https://travis-ci.org/daggerok/r2dbc-example.svg?branch=master["Build Status", link="https://travis-ci.org/daggerok/r2dbc-example"]
 
-////
-image:https://travis-ci.org/daggerok/r2dbc-example.svg?branch=master["Build Status", link="https://travis-ci.org/daggerok/r2dbc-example"]
-image:https://gitlab.com/daggerok/r2dbc-example/badges/master/build.svg["Build Status", link="https://gitlab.com/daggerok/r2dbc-example/-/jobs"]
-image:https://img.shields.io/bitbucket/pipelines/daggerok/r2dbc-example.svg["Build Status", link="https://bitbucket.com/daggerok/r2dbc-example"]
-////
+Reactive JDBC (R2DBC)
 
 //tag::content[]
 
@@ -13,24 +9,36 @@ image:https://img.shields.io/bitbucket/pipelines/daggerok/r2dbc-example.svg["Bui
 .gradle
 [source,bash]
 ----
+./gradlew build composeUp
+
 ./gradlew
 java -jar build/libs/*.jar
-bash build/libs/*.jar
+# bash build/libs/*.jar
 
-./gradlew build composeUp
+http :8080
+http :8080/api
+
 ./gradlew composeDown
 ----
 
 .maven
 [source,bash]
 ----
+./mvnw; ./mvnw docker-compose:up -P docker
+
 ./mvnw
 java -jar target/*.jar
-bash target/*.jar
+# bash target/*.jar
 
-./mvnw; ./mvnw docker-compose:up -P docker
+http :8080
+http :8080/api
+
 ./mvnw docker-compose:down -P docker
 ----
+
+- link:https://github.com/r2dbc[GitHub: R2DBC]
+- link:https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html[Spring Reactive Web]
+- link:https://www.youtube.com/watch?v=qwF6v6FN_Uc[YouTube: Getting Started with R2DBC]
 
 //end::content[]
 

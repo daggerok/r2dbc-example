@@ -1,20 +1,28 @@
-version: "2.1"
-
+version: '2.1'
 services:
-
-  gradle-r2dbc-example-app:
-    build:
-      context: .
-      dockerfile: gradle/Dockerfile
-    volumes: ["gradle-r2dbc-example-app-data:/home/appuser"]
-    ports: ["8080:8080"]
-    networks: [backing-services]
+  postgres:
+    image: postgres:9.4-alpine
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - './src/main/resources/scheme.sql:/docker-entrypoint-initdb.d/10-init.sql'
+    ports: ['5432:5432']
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-h', '127.0.0.1', '-p', '5432', '-d', '$$POSTGRES_DB', '-U', '$$POSTGRES_USER']
+      timeout: 3s
+      retries: 33
+      interval: 30s
     #restart: unless-stopped
     #mem_limit: 786432000 # container limit: 700Mb (700 * 1024 * 1024)
-
-volumes:
-  gradle-r2dbc-example-app-data: {}
-
+    networks:
+      backing-services:
+        aliases:
+        - p
+        - pg
+        - db
+        - postgres
 networks:
   backing-services:
     driver: bridge

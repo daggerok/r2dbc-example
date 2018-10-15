@@ -1,20 +1,38 @@
-version: "2.1"
-
+version: '2.1'
 services:
-
-  maven-r2dbc-example-app:
-    build:
-      context: .
-      dockerfile: .mvn/Dockerfile
-    volumes: ["maven-r2dbc-example-app-data:/home/appuser"]
-    ports: ["8080:8080"]
-    networks: [backing-services]
+  postgres:
+    image: postgres:9.4-alpine
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports: ['5432:5432']
+    volumes: ['./src/main/resources/scheme.sql:/docker-entrypoint-initdb.d/10-init.sql']
+    healthcheck:
+      test: pg_isready --host=127.0.0.1 --port=5432 --dbname=$$POSTGRES_DB --username=$$POSTGRES_USER
+      timeout: 3s
+      retries: 33
+      interval: 30s
     #restart: unless-stopped
     #mem_limit: 786432000 # container limit: 700Mb (700 * 1024 * 1024)
-
-volumes:
-  maven-r2dbc-example-app-data: {}
-
+    networks:
+      backing-services:
+        aliases:
+        - p
+        - pg
+        - db
+        - postgres
+#  maven-r2dbc-example-app:
+#    build:
+#      context: .
+#      dockerfile: .mvn/Dockerfile
+#    volumes: ["maven-r2dbc-example-app-data:/home/appuser"]
+#    ports: ["8080:8080"]
+#    networks: [backing-services]
+#    #restart: unless-stopped
+#    #mem_limit: 786432000 # container limit: 700Mb (700 * 1024 * 1024)
+#volumes:
+#  maven-r2dbc-example-app-data: {}
 networks:
   backing-services:
     driver: bridge
