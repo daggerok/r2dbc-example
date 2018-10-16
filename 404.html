@@ -463,7 +463,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span id="author" class="author">Maksim Kostromin</span><br>
 <span id="email" class="email"><a href="mailto:daggerok@gmail.com">daggerok@gmail.com</a></span><br>
 <span id="revnumber">version 0.0.1,</span>
-<span id="revdate">2018-10-13 04:00:20 UTC</span>
+<span id="revdate">2018-10-16 20:42:26 UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -481,24 +481,45 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="title">gradle</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./gradlew
-java -jar build/libs/*.jar
-bash build/libs/*.jar
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./gradlew build composeUp
 
-./gradlew build composeUp
+./gradlew
+java -jar build/libs/*.jar
+# bash build/libs/*.jar
+
+http :8080
+http :8080/api
+
 ./gradlew composeDown</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">maven</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw
-java -jar target/*.jar
-bash target/*.jar
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">./mvnw; ./mvnw docker-compose:up -P docker
 
-./mvnw; ./mvnw docker-compose:up -P docker
+./mvnw
+java -jar target/*.jar
+# bash target/*.jar
+
+http :8080
+http :8080/api
+
 ./mvnw docker-compose:down -P docker</code></pre>
 </div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/r2dbc">GitHub: R2DBC</a></p>
+</li>
+<li>
+<p><a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html">Spring Reactive Web</a></p>
+</li>
+<li>
+<p><a href="https://www.youtube.com/watch?v=qwF6v6FN_Uc">YouTube: Getting Started with R2DBC</a></p>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -532,7 +553,7 @@ bash target/*.jar
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1<br>
-Last updated 2018-10-13 04:00:20 UTC
+Last updated 2018-10-16 20:42:26 UTC
 </div>
 </div>
 <!-- jquery -->
