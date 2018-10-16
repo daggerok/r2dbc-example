@@ -39,49 +39,50 @@ before_install:
 #
 - sudo pip install docker-compose httpie >/dev/null 2>&1
 #
-- source <(curl -s https://raw.githubusercontent.com/daggerok/bash-functions/master/main.bash)
-- stop_any 8080 3000 80 >/dev/null
-#
 - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - >/dev/null
 - echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list >/dev/null
 - sudo apt-get update -yqq >/dev/null
 - sudo apt-get install -yqq --no-install-suggests --no-install-recommends yarn >/dev/null
+#
+- sudo /etc/init.d/postgresql stop || echo 'command "sudo /etc/init.d/postgresql stop" failed.'
+- sudo service mysql stop || echo 'command "sudo service mysql stop" failed.'
+#
+- source <(curl -s https://raw.githubusercontent.com/daggerok/bash-functions/master/main.bash)
+- stop_any 8000 5432 8080 3000 80 >/dev/null
 
 script:
 - export root=$(pwd)
 #
+- ./gradlew composeDown >/dev/null
 - ./gradlew composeUp
-#
 - ./gradlew >/dev/null
 - java -jar ./build/libs/*.jar &
 - wait_for 8080
 - http :8080
 - http :8080/api
-- stop_any 8080 80
+- stop_any 8080 8000 80
 #
 - bash ./build/libs/*.jar &
 - wait_for 8080
 - http :8080
 - http :8080/api
-- stop_any 8080 80
-#
+- stop_any 8080 8000 80
 - bash gradlew composeDown
 #
+- ./mvnw -P docker docker-compose:down >/dev/null
 - ./mvnw -P docker docker-compose:up
-#
 - bash mvnw >/dev/null
 - java -jar ./target/*.jar &
 - wait_for 8080
 - http :8080
 - http :8080/api
-- stop_any 8080 80
+- stop_any 8080 8000 80
 #
 - bash ./target/*.jar &
 - wait_for 8080
 - http :8080
 - http :8080/api
-- stop_any 8080 80
-#
+- stop_any 8080 8000 80
 - ./mvnw -Pdocker docker-compose:down
 
 before_deploy:
