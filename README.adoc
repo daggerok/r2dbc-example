@@ -40,6 +40,7 @@ http :8080/api
 - link:https://github.com/r2dbc[GitHub: R2DBC]
 - link:https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html[Spring Reactive Web]
 - link:https://www.youtube.com/watch?v=qwF6v6FN_Uc[YouTube: Getting Started with R2DBC]
+- link:https://www.youtube.com/watch?time_continue=2&v=fIMdlE5Hvzk[Spring Tips]
 
 //end::content[]
 
